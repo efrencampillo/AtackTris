@@ -65,6 +65,12 @@ public class MySurface extends SurfaceView implements Runnable,
 	Canvas drawCanvas;
 	Canvas tmpCanvas;
 	
+	
+	//block option
+	int num_blocks=6;
+	int block_size;
+	int block_height;
+	
 	/**
 	 * @param surfaceTexture
 	 */
@@ -101,7 +107,8 @@ public class MySurface extends SurfaceView implements Runnable,
 		sHeight=height;
 		isRunning = true;
 		buffer=Bitmap.createBitmap(sWidth, sHeight, Config.ARGB_8888);
-		
+		block_size=sWidth/num_blocks;
+		block_height=sHeight/block_size;
 		mythread = new Thread(this);
 		mythread.start();
 	}
@@ -161,20 +168,18 @@ public class MySurface extends SurfaceView implements Runnable,
 	  public void paintGameLevel(){
 	           // long start = System.currentTimeMillis();//for count time to paint
 		  block[][] board=((AtackTris)context).table;
-		  int bw=((AtackTris)context).board_width;
-		  int bh=((AtackTris)context).board_heigth;
 		  Paint p=new Paint();
 		  
-		  for(int i=0;i<bw;i++){
-			  for(int j=bh-1;j>0;j--){
+		  for(int i=1;i<num_blocks+1;i++){
+			  for(int j=block_height-1;j>=0;j--){
 				 if(board[i][j]!=null&&board[i][j].color!=6){
 					 p.setStyle(Paint.Style.FILL);
 					 p.setColor(board[i][j].color);
-					 tmpCanvas.drawRect(i*50, j*50,(i+1)*50 ,(j-1)*50, p);
+					 tmpCanvas.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
 					 p.setStyle(Paint.Style.STROKE);
 					 p.setColor(Color.BLACK); 
 					 p.setStrokeWidth(2);
-					 tmpCanvas.drawRect(i*50, j*50,(i+1)*50 , (j-1)*50, p);
+					 tmpCanvas.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
 					
 				 }
 			  }
@@ -193,7 +198,7 @@ public class MySurface extends SurfaceView implements Runnable,
 	            Graphics g=this.getGraphics();//draw in screen
 	            g.drawImage(paint,0,0, this);   */                   
 	    }
-	    public void paintMainMenu(GameButton start){
+	    public void paintMainMenu(ArrayList<GameButton> buttons){
 	    	/*Paint p=new Paint();
 	    	p.setColor(Color.WHITE);
 	    	p.setTextSize(30);
@@ -201,24 +206,17 @@ public class MySurface extends SurfaceView implements Runnable,
 	    	tmpCanvas.drawText("Start Game", sWidth/2, sHeight/3,p );
 	    	p.setStyle(Paint.Style.STROKE);
 	    	tmpCanvas.drawRect(sWidth/3-20, sHeight/3-40,sWidth*2/3+20,sHeight/3+20,p );*/
-	    	start.Draw(tmpCanvas);
+	    	for(GameButton btn:buttons){
+	    		if(btn.ref_level==0)btn.Draw(tmpCanvas);
+	    	}
 	    	//TODO paint more things
 	    }
-	    public void paintpaused(){
-	   /*     Graphics2D gp=(Graphics2D)paint.getGraphics();
-	        //Graphics gp=this.getGraphics();
-	        gp.clearRect(0,0,this.getWidth(),this.getHeight());
-	        gp.setColor(Color.red);
-	        gp.drawString("paused",100, 100);
-	        gp.drawString("Presione 'P' para  seguir jugando",100, 150);
-	        gp.drawString("Presione 'R' para Reiniciar el nivel",100, 200);
-	        gp.drawString("Presione 'S' para salir del juego",100, 250);
-	        gp.dispose();
-	        Graphics g=this.getGraphics();//draw in screen
-	        g.drawImage(paint,0,0, this);
-*/
+	    public void paintpaused(ArrayList<GameButton> buttons){
+	    	for(GameButton btn:buttons){
+	    		if(btn.ref_level==3)btn.Draw(tmpCanvas);
+	    	}
 	    }
-	    public void paintend(){
+	    public void paintend(ArrayList<GameButton> buttons){
 	   /*    Graphics2D gp=(Graphics2D)paint.getGraphics();
 	         gp.drawImage((BufferedImage)cache.get("go"),0,0, this);//paint background
 	         gp.setColor(Color.white);
@@ -226,6 +224,9 @@ public class MySurface extends SurfaceView implements Runnable,
 	         gp.dispose();
 	        Graphics g=this.getGraphics();
 	        g.drawImage(paint,0,0, this);*/
+	    	for(GameButton btn:buttons){
+	    		if(btn.ref_level==2)btn.Draw(tmpCanvas);
+	    	}
 	    } //paint game over and the final score   
 	    public void paintLoading(){
 	    	Paint p=new Paint();

@@ -21,8 +21,7 @@ public class AtackTris extends Activity {
     public ArrayList<block> blocs;
     public ArrayList<block> figure;
     public ArrayList<block> casc=new ArrayList<block>();
-    public int board_width=8;
-    public int board_heigth=17;
+    
     public block[][] table;//the grid for the blocs in the game
     public cursor point;
     public Random r;
@@ -36,19 +35,19 @@ public class AtackTris extends Activity {
     public int tmove=300;  //time to move blocks, this will decreasing with time
     public boolean flagc=false;
     
-    GameButton start;
-    
+    ArrayList<GameButton> buttons;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		point=new cursor(this);
     	r=new Random();
 		mrender=new MySurface(this);
+		buttons=new ArrayList<GameButton>();
 		setContentView(mrender);
     	detector=new GestureDetector(this,new GestureDetector.SimpleOnGestureListener(){
             @Override
             public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            	mrender.fling(event1,event2, velocityX,velocityY);
+            	if(game_status==1)mrender.fling(event1,event2, velocityX,velocityY);
                 return true;
             }
             @Override
@@ -71,14 +70,65 @@ public class AtackTris extends Activity {
                     blocs=new ArrayList<block>();
                     figure=new ArrayList<block>();
                     ttime=System.currentTimeMillis();
-                    start=new GameButton(mrender.sWidth/3,mrender.sHeight/3,mrender.sWidth/3,50);
+                    GameButton start=new GameButton(mrender.sWidth/3,mrender.sHeight/3,mrender.sWidth/3,50);
             		start.text="Start Game";
+            		start.ref_level=0;
+            		start.setAction(new Runnable(){
+						@Override
+						public void run() {
+							createinitialtable();
+							game_status=1;
+						}});
+            		buttons.add(start);
+            		
+            		GameButton quit=new GameButton(mrender.sWidth/3,mrender.sHeight*2/3,mrender.sWidth/3,50);
+            		quit.text="Exit";
+            		quit.ref_level=0;
+            		quit.setAction(new Runnable(){
+						@Override
+						public void run() {
+							finish();
+						}});
+            		buttons.add(quit);
+            		
+            		GameButton resume=new GameButton(mrender.sWidth/3,mrender.sHeight/3,mrender.sWidth/3,50);
+            		resume.text="Resume Game";
+            		resume.ref_level=3;
+            		resume.setAction(new Runnable(){
+						@Override
+						public void run() {
+							game_status=1;
+						}});
+            		buttons.add(resume);
+            		
+            		GameButton restart=new GameButton(mrender.sWidth/3,mrender.sHeight/2,mrender.sWidth/3,50);
+            		restart.text="Restart Game";
+            		restart.ref_level=3;
+            		restart.setAction(new Runnable(){
+						@Override
+						public void run() {
+							Restart();
+							game_status=1;
+						}});
+            		buttons.add(restart);
+            		
+            		GameButton quitlevel=new GameButton(mrender.sWidth/3,mrender.sHeight*2/3,mrender.sWidth/3,50);
+            		quitlevel.text="Exit Game";
+            		quitlevel.ref_level=3;
+            		quitlevel.setAction(new Runnable(){
+						@Override
+						public void run() {
+							Restart();
+							game_status=0;
+						}});
+            		buttons.add(quitlevel);
+            		
             		//TODO load images
                     game_status++;
             		break;
                 case 0://begining MainMenu game
-                	checkMainMenuClick();
-                	mrender.paintMainMenu(start);
+                	
+                	mrender.paintMainMenu(buttons);
                     break;
                 case 1://Paint Level Game playing
                     genblock();
@@ -94,27 +144,34 @@ public class AtackTris extends Activity {
                     }
                     break;
                 case 2: //loose
-                	mrender.paintend();
+                	mrender.paintend(buttons);
                     break;
                 case 3:// pause
-                	mrender.paintpaused();
+                	mrender.paintpaused(buttons);
                     break;
             }
+            checkButtonClick(game_status);
     }
-    private void checkMainMenuClick(){
+    /**
+     * this method validates button from main menu
+     * */
+    private void checkButtonClick(int status){
     	if(last_click==null)return;
-    	int cx=(int) last_click.getX();
-    	int cy=(int) last_click.getY();
-    	if(cx>start.x&&cx<(start.w+start.x)){
-			if(cy>start.y&&cy<(start.h+start.y)){
-				Log.i("btn", "click start");
-				createinitialtable();
-				game_status=1;
-				
+    	for(GameButton btn:buttons){
+    		if(btn.ref_level!=status)continue;
+	    	int cx=(int) last_click.getX();
+	    	int cy=(int) last_click.getY();
+	    	if(cx>btn.x&&cx<(btn.w+btn.x)){
+				if(cy>btn.y&&cy<(btn.h+btn.y)){
+					btn.onclick();
+					Log.i("foundbutton","onclick: "+btn);
+					break;
+				}
 			}
-		}
+    	}
     	last_click=null;
     }
+    
     /**
      * method to add line of blocks if pass any time
      * */
@@ -137,7 +194,7 @@ public class AtackTris extends Activity {
     /**
      * method to remove a line of blocks from explosion 
      * */
-    public boolean lineexplode(int inex){
+  /*  public boolean lineexplode(int inex){
         boolean ex=true;
         for(int i=inex;i<17;i++){
             if(table[1][i]!=null){
@@ -160,7 +217,7 @@ public class AtackTris extends Activity {
            }
         }
         return ex;
-    }
+    }*/
     /**
      * this method change the status of the machine state to state loose
      * */
@@ -174,14 +231,13 @@ public class AtackTris extends Activity {
      * this method generate the blocs at the begining
      * */
     private void createinitialtable(){
-        table=new block[board_width][board_heigth];
+        table=new block[mrender.num_blocks+2][mrender.block_height+1];
       //this line to creates a invisible floor
-        for(int i=0;i<board_width;i++)table[i][16]=new block(this);
+        for(int i=0;i<mrender.num_blocks+2;i++)table[i][mrender.block_height]=new block(this);
         // this line creates a invisible wall at left
-        for(int i=0;i<board_heigth;i++)table[0][i]=new block(this);
+        for(int i=0;i<mrender.block_height+1;i++)table[0][i]=new block(this);
         // this line creates a invisible wall at righs
-        for(int i=0;i<board_heigth;i++)table[7][i]=new block(this);
-        
+        for(int i=0;i<mrender.block_height+1;i++)table[mrender.num_blocks+1][i]=new block(this);
         move=System.currentTimeMillis();
         Log.i("aacktris", "initial table created");
     }
@@ -190,18 +246,17 @@ public class AtackTris extends Activity {
      * */
     private void genblock() {
         if(checbloc()){
-            int nx=r.nextInt(5)+1; //create coordenate x:range(1:5)
+            int nx=r.nextInt(mrender.num_blocks-1)+1; //create coordenate x:range(1:5)
             int nc=getColorWithRandom(r.nextInt(5)+1); //create color
             table[nx][0]=new block(nc,this);
             table[nx][0].color=nc;
             nc=getColorWithRandom(r.nextInt(5)+1);
             table[nx+1][0]=new block(nc,this);
             table[nx+1][0].color=nc;
-            Log.i("Tris", "generated pair of bloclk");
         }
      }
      public void genbloctime(){
-         int nx=r.nextInt(5)+1;
+         int nx=r.nextInt(mrender.num_blocks-1)+1;
          int nc=getColorWithRandom(r.nextInt(5)+1);
          table[nx][0]=new block(nc,this);
          table[nx][0].color=nc;
@@ -210,8 +265,8 @@ public class AtackTris extends Activity {
          table[nx+1][0].color=nc;
      }
      private boolean checbloc(){///check if all the blocs are static
-        for(int i=1;i<board_width-1;i++){
-			  for(int j=board_heigth-2;j>=0;j--){  
+        for(int i=1;i<mrender.num_blocks+1;i++){
+			  for(int j=mrender.block_height-1;j>=0;j--){  
 				 if(table[i][j]!=null&&!table[i][j].isStatic&&!table[i][j].arrived){
 					 return false;
 				 }
@@ -221,8 +276,8 @@ public class AtackTris extends Activity {
      }
     private void movebloc(){
     	if(System.currentTimeMillis()-move>tmove){
-    		for(int i=1;i<board_width-1;i++){
-	    		for(int j=board_heigth-2;j>=0;j--){
+    		for(int i=1;i<mrender.num_blocks+1;i++){
+	    		for(int j=mrender.block_height-1;j>=0;j--){
 	    			if(table[i][j]!=null)table[i][j].down(i, j);
 				}
 	    	}
@@ -396,5 +451,23 @@ public class AtackTris extends Activity {
     	default:
     		return 0xff000000;
     	}
+    }
+    /* (non-Javadoc)
+     * @see android.app.Activity#onBackPressed()
+     */
+    @Override
+    public void onBackPressed() {
+    	if(game_status==1)game_status=3;
+    	else if(game_status==2)game_status=0;
+    	else if(game_status==3)game_status=1;
+    	else super.onBackPressed();
+    }
+    /* (non-Javadoc)
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+    	if(game_status==1)game_status=3;
+    	super.onPause();
     }
 }
