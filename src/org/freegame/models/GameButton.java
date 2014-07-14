@@ -16,7 +16,6 @@ public class GameButton {
 	Runnable action=null;//action to do
 	public String text="";//text to show
 	public int textSize=25;
-	public int ref_level=0;
 	public GameButton(int px,int py, int lx/*length in x*/,int ly/*length in y*/){
 		x=px;y=py;w=lx;h=ly;
 	}

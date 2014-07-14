@@ -1,29 +1,4 @@
-/* *************************************************************************
- *
- *   Copyright (c)  2013 by Jaguar Labs.
- *   Confidential and Proprietary
- *   All Rights Reserved
- *
- *   This software is furnished under license and may be used and copied
- *   only in accordance with the terms of its license and with the
- *   inclusion of the above copyright notice. This software and any other
- *   copies thereof may not be provided or otherwise made available to any
- *   other party. No title to and/or ownership of the software is hereby
- *   transferred.
- *
- *   The information in this software is subject to change without notice and
- *   should not be construed as a commitment by JaguarLabs.
- *
- * @(#)Id: 
- * Last Revised By   : 
- * Last Checked In   : 02/07/2014
- * Last Version      :
- *
- * Original Author   : kuno
- * Origin            : 
- * Notes             :
- *
- * *************************************************************************/
+
 package org.freegame.attacktis;
 
 import java.util.ArrayList;
@@ -60,16 +35,13 @@ public class MySurface extends SurfaceView implements Runnable,
 	volatile boolean isRunning=false;// variable to control the rendering loop
 	
 	Bitmap buffer;
-	public int sWidth=0;
-	public int sHeight=0;
+	public static int sWidth=0;
+	public static int sHeight=0;
 	Canvas drawCanvas;
 	Canvas tmpCanvas;
 	
 	
-	//block option
-	int num_blocks=6;
-	int block_size;
-	int block_height;
+	
 	
 	/**
 	 * @param surfaceTexture
@@ -79,24 +51,7 @@ public class MySurface extends SurfaceView implements Runnable,
 		context=ctx;
 		getHolder().addCallback(this);
 	}
-	/**
-	 * fling event to move
-	 * */
-	public void fling(MotionEvent event1,MotionEvent event2, float velx, float vely){
-		if(Math.abs(velx)>Math.abs(vely)){///horizontal fling
-			if(velx<0){//TO left fling
-				Log.i("fling", "left");
-			}else{//TO right fling
-				Log.i("fling", "right");
-			}
-		}else{///vertical fling
-			if(vely<0){
-				Log.i("fling", "up");
-			}else{
-				Log.i("fling", "down");
-			}
-		}
-	}
+	
 	
 	/* (non-Javadoc)
 	 * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
@@ -107,8 +62,6 @@ public class MySurface extends SurfaceView implements Runnable,
 		sHeight=height;
 		isRunning = true;
 		buffer=Bitmap.createBitmap(sWidth, sHeight, Config.ARGB_8888);
-		block_size=sWidth/num_blocks;
-		block_height=sHeight/block_size;
 		mythread = new Thread(this);
 		mythread.start();
 	}
@@ -152,7 +105,7 @@ public class MySurface extends SurfaceView implements Runnable,
 		         		tmpCanvas = new Canvas(buffer);
 		         		tmpCanvas.drawColor(Color.GRAY);
 		         		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);	
-						((AtackTris)context).mainloop();
+						((AtackTris)context).mainloop(tmpCanvas);
 						drawCanvas.drawBitmap(buffer, 0, 0, paint);
 					}
 					getHolder().unlockCanvasAndPost(drawCanvas);
@@ -163,58 +116,8 @@ public class MySurface extends SurfaceView implements Runnable,
 	      }
 	}
 	
-	/**
-	 * */
-	  public void paintGameLevel(){
-	           // long start = System.currentTimeMillis();//for count time to paint
-		  block[][] board=((AtackTris)context).table;
-		  Paint p=new Paint();
-		  
-		  for(int i=1;i<num_blocks+1;i++){
-			  for(int j=block_height-1;j>=0;j--){
-				 if(board[i][j]!=null&&board[i][j].color!=6){
-					 p.setStyle(Paint.Style.FILL);
-					 p.setColor(board[i][j].color);
-					 tmpCanvas.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
-					 p.setStyle(Paint.Style.STROKE);
-					 p.setColor(Color.BLACK); 
-					 p.setStrokeWidth(2);
-					 tmpCanvas.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
-					
-				 }
-			  }
-		  }
-	           
-	     /*      
-	            if(!point.status)gp.drawImage((BufferedImage)cache.get("cursor"),(point.x-1)*33+10,point.y*33+20, this);//paint cursor
-	            else gp.drawImage((BufferedImage)cache.get("cursors"),(point.x-1)*33+10,point.y*33+20, this);
-	            gp.drawRect(5,10, 210, 545);
-	            gp.drawString("Seconds remaining="+(int)((btime-time)/1000),100,570);
-	            long elapsed = System.currentTimeMillis() - start;// total time elpased for create the image
-	            gp.drawString("tardo:"+elapsed+" mls", 15, 570);
-	            gp.drawString("puntos:"+playerpoints, 220, 40);
-	            gp.drawString("uc:"+cascada, 220, 70);
-	            gp.dispose();//draw in Buffered Image        
-	            Graphics g=this.getGraphics();//draw in screen
-	            g.drawImage(paint,0,0, this);   */                   
-	    }
-	    public void paintMainMenu(ArrayList<GameButton> buttons){
-	    	/*Paint p=new Paint();
-	    	p.setColor(Color.WHITE);
-	    	p.setTextSize(30);
-	    	p.setTextAlign(Paint.Align.CENTER);
-	    	tmpCanvas.drawText("Start Game", sWidth/2, sHeight/3,p );
-	    	p.setStyle(Paint.Style.STROKE);
-	    	tmpCanvas.drawRect(sWidth/3-20, sHeight/3-40,sWidth*2/3+20,sHeight/3+20,p );*/
-	    	for(GameButton btn:buttons){
-	    		if(btn.ref_level==0)btn.Draw(tmpCanvas);
-	    	}
-	    	//TODO paint more things
-	    }
 	    public void paintpaused(ArrayList<GameButton> buttons){
-	    	for(GameButton btn:buttons){
-	    		if(btn.ref_level==3)btn.Draw(tmpCanvas);
-	    	}
+	    	
 	    }
 	    public void paintend(ArrayList<GameButton> buttons){
 	   /*    Graphics2D gp=(Graphics2D)paint.getGraphics();
@@ -225,14 +128,8 @@ public class MySurface extends SurfaceView implements Runnable,
 	        Graphics g=this.getGraphics();
 	        g.drawImage(paint,0,0, this);*/
 	    	for(GameButton btn:buttons){
-	    		if(btn.ref_level==2)btn.Draw(tmpCanvas);
+	    		btn.Draw(tmpCanvas);
 	    	}
 	    } //paint game over and the final score   
-	    public void paintLoading(){
-	    	Paint p=new Paint();
-	    	p.setColor(Color.BLACK);
-	    	p.setTextSize(30);
-	    	p.setTextAlign(Paint.Align.CENTER);
-	    	tmpCanvas.drawText("Loading...", sWidth/2,sHeight/2, p);
-	    }
+	    
 }

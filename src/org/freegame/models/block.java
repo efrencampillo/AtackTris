@@ -1,6 +1,8 @@
 package org.freegame.models;
 
 import org.freegame.attacktis.AtackTris;
+import org.freegame.levels.GameLevel;
+
 
 /**
  * class block
@@ -12,11 +14,11 @@ public class block {
     public boolean arrived=false;// blocstat 0=static,1=falling
     public int color;
     public int dir=1; //number of direction to find figures
-    AtackTris game;
+    GameLevel game;
 /**
  * construct for be falling
  * */
-    public block(int C,AtackTris g){
+    public block(int C,GameLevel g){
         color=C;
         isStatic=false;
         game=g;
@@ -25,7 +27,7 @@ public class block {
     /*
      * construct for block downing
      * */
-    public block(AtackTris g){
+    public block(GameLevel g){
         color=6;
         isStatic=true;
         game=g;
