@@ -4,7 +4,7 @@ package org.freegame.attacktis;
 import java.util.ArrayList;
 
 import org.freegame.models.GameButton;
-import org.freegame.models.block;
+import org.freegame.models.Block;
 
 
 import android.content.Context;

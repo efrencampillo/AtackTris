@@ -5,10 +5,10 @@ import org.freegame.levels.GameLevel;
 
 
 /**
- * class block
+ * class Block
  * this class has the behaviour to down every turn
  * */
-public class block {
+public class Block {
 
     public boolean isStatic=false;
     public boolean arrived=false;// blocstat 0=static,1=falling
@@ -18,16 +18,16 @@ public class block {
 /**
  * construct for be falling
  * */
-    public block(int C,GameLevel g){
+    public Block(int C,GameLevel g){
         color=C;
         isStatic=false;
         game=g;
         arrived=false;
     }
     /*
-     * construct for block downing
+     * construct for Block downing
      * */
-    public block(GameLevel g){
+    public Block(GameLevel g){
         color=6;
         isStatic=true;
         game=g;
@@ -35,12 +35,12 @@ public class block {
                 
     }
     /**
-     * Move down for a block
+     * Move down for a Block
      */
     public void down(int x,int y){  ///
             if(game.table[x][y+1]==null){ /// if can fall
                 arrived=false;
-                block tmp=game.table[x][y];
+                Block tmp=game.table[x][y];
                 game.table[x][y]=null;
                 if(y<15)y++;
                 game.table[x][y]=tmp;

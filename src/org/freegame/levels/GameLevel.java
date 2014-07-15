@@ -7,14 +7,13 @@ import java.util.Random;
 import org.freegame.attacktis.AtackTris;
 import org.freegame.attacktis.MySurface;
 import org.freegame.models.SceneBase;
-import org.freegame.models.block;
-import org.freegame.models.cursor;
+import org.freegame.models.Block;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import android.view.GestureDetector;
+
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -24,11 +23,11 @@ import android.view.MotionEvent;
  */
 public class GameLevel extends SceneBase {
 
-	public ArrayList<block> blocs;
-    public ArrayList<block> figure;
-    public ArrayList<block> casc=new ArrayList<block>();
-    public block[][] table;//the grid for the blocs in the game
-    public cursor point;
+	public ArrayList<Block> blocs;
+    public ArrayList<Block> figure;
+    public ArrayList<Block> casc=new ArrayList<Block>();
+    public Block[][] table;//the grid for the blocs in the game
+
     public Random r;
     public long move,init,time,paused,ttime,linextra;
     public long btime=120000;//couter timer of the game
@@ -36,10 +35,10 @@ public class GameLevel extends SceneBase {
     public int tmove=300;  //time to move blocks, this will decreasing with time
     public boolean flagc=false;
     
-  //block option
+  //Block option
   	public int num_blocks=6;
   	public int block_size;
-  	public int block_height;
+  	public int num_block_vert;
   	
  
   	
@@ -49,11 +48,11 @@ public class GameLevel extends SceneBase {
 	@Override
 	public void loadScene() {
 		block_size=MySurface.sWidth/num_blocks;
-		block_height=MySurface.sHeight/block_size;
+		num_block_vert=MySurface.sHeight/block_size;
 		linextra=System.currentTimeMillis();
 		ttime=System.currentTimeMillis();
-        blocs=new ArrayList<block>();
-        figure=new ArrayList<block>();
+        blocs=new ArrayList<Block>();
+        figure=new ArrayList<Block>();
         createinitialtable();
         r=new Random();
         
@@ -87,7 +86,7 @@ public class GameLevel extends SceneBase {
 	protected void drawScene(Canvas c) {		
 		  Paint p=new Paint();	  
 		  for(int i=1;i<num_blocks+1;i++){
-			  for(int j=block_height-1;j>=0;j--){
+			  for(int j=num_block_vert-1;j>=0;j--){
 				 if(table[i][j]!=null&&table[i][j].color!=6){
 					 p.setStyle(Paint.Style.FILL);
 					 p.setColor(table[i][j].color);
@@ -145,13 +144,13 @@ public class GameLevel extends SceneBase {
      * this method generate the blocs at the begining
      * */
     private void createinitialtable(){
-        table=new block[num_blocks+2][block_height+1];
+        table=new Block[num_blocks+2][num_block_vert+1];
       //this line to creates a invisible floor
-        for(int i=0;i<num_blocks+2;i++)table[i][block_height]=new block(this);
+        for(int i=0;i<num_blocks+2;i++)table[i][num_block_vert]=new Block(this);
         // this line creates a invisible wall at left
-        for(int i=0;i<block_height+1;i++)table[0][i]=new block(this);
+        for(int i=0;i<num_block_vert+1;i++)table[0][i]=new Block(this);
         // this line creates a invisible wall at righs
-        for(int i=0;i<block_height+1;i++)table[num_blocks+1][i]=new block(this);
+        for(int i=0;i<num_block_vert+1;i++)table[num_blocks+1][i]=new Block(this);
         move=System.currentTimeMillis();
         Log.i("aacktris", "initial table created");
     }
@@ -162,25 +161,25 @@ public class GameLevel extends SceneBase {
         if(checbloc()){
             int nx=r.nextInt(num_blocks-1)+1; //create coordenate x:range(1:5)
             int nc=getColorWithRandom(r.nextInt(5)+1); //create color
-            table[nx][0]=new block(nc,this);
+            table[nx][0]=new Block(nc,this);
             table[nx][0].color=nc;
             nc=getColorWithRandom(r.nextInt(5)+1);
-            table[nx+1][0]=new block(nc,this);
+            table[nx+1][0]=new Block(nc,this);
             table[nx+1][0].color=nc;
         }
      }
      public void genbloctime(){
          int nx=r.nextInt(num_blocks-1)+1;
          int nc=getColorWithRandom(r.nextInt(5)+1);
-         table[nx][0]=new block(nc,this);
+         table[nx][0]=new Block(nc,this);
          table[nx][0].color=nc;
          nc=getColorWithRandom(r.nextInt(5)+1);
-         table[nx+1][0]=new block(nc,this);
+         table[nx+1][0]=new Block(nc,this);
          table[nx+1][0].color=nc;
      }
      private boolean checbloc(){///check if all the blocs are static
         for(int i=1;i<num_blocks+1;i++){
-			  for(int j=block_height-1;j>=0;j--){  
+			  for(int j=num_block_vert-1;j>=0;j--){  
 				 if(table[i][j]!=null&&!table[i][j].isStatic&&!table[i][j].arrived){
 					 return false;
 				 }
@@ -191,7 +190,7 @@ public class GameLevel extends SceneBase {
     private void movebloc(){
     	if(System.currentTimeMillis()-move>tmove){
     		for(int i=1;i<num_blocks+1;i++){
-	    		for(int j=block_height-1;j>=0;j--){
+	    		for(int j=num_block_vert-1;j>=0;j--){
 	    			if(table[i][j]!=null)table[i][j].down(i, j);
 				}
 	    	}
@@ -215,7 +214,7 @@ public class GameLevel extends SceneBase {
         createinitialtable();
     }
     /**
-     * this method remove the sent block
+     * this method remove the sent Block
      * */
     public void remove(int x, int y){//remover blocs
        table[x][y]=null;
@@ -238,27 +237,27 @@ public class GameLevel extends SceneBase {
             checfigure1(x+1,y);
         }
         if(table[x][y+1]!=null)
-        if(table[x][y+1].color==table[x][y].color && !figure.contains(table[x][y+1])){///check down block
+        if(table[x][y+1].color==table[x][y].color && !figure.contains(table[x][y+1])){///check down Block
            // dir--;                  
             checfigure1(x,y+1);
         }
         if(table[x-1][y]!=null)
-        if(table[x-1][y].color==table[x][y].color && !figure.contains(table[x-1][y])){///check Left block
+        if(table[x-1][y].color==table[x][y].color && !figure.contains(table[x-1][y])){///check Left Block
         //    dir--;                        
             checfigure1(x-1,y);
         }  
         if(figure.size()>3){
            removefigure(); 
        }else{
-           figure=new ArrayList<block>();
+           figure=new ArrayList<Block>();
            
        }
    }
    public void removefigure(){
          /*   boolean bloccasc=false;
             for(int i=0;i<figure.size();i++){
-                block b=figure.get(i);
-                block d=get(b.x,b.y-1);
+                Block b=figure.get(i);
+                Block d=get(b.x,b.y-1);
                 if(casc.contains(b)){casc.remove(b);bloccasc=true;}
                 if(d!=null&&!figure.contains(d)&&!casc.contains(d))
                     casc.add(d);
@@ -266,15 +265,15 @@ public class GameLevel extends SceneBase {
     	        }
     	        if(bloccasc)cascada++;
     	        else cascada=0;
-    	        figure=new ArrayList<block>();
+    	        figure=new ArrayList<Block>();
     	        playerpoints++;*/
   	} //remove blocks from figures created
       
     public void change(int bx,int by,int px,int py){   //change bolcs position
-        /*    block a=null;
-            block n=null;
+        /*    Block a=null;
+            Block n=null;
             for(int i=0;i<blocs.size();i++){
-                block b=blocs.get(i);
+                Block b=blocs.get(i);
                 if(b.x==bx&&b.y==by){a=b;}
                 if(b.x==px&&b.y==py){n=b;}
             }
@@ -287,30 +286,13 @@ public class GameLevel extends SceneBase {
             if(!this.lineexplode(n.y)){checfigure1(n,0);}*/
     }//change blocs position
     
-    /**
-	 * fling event to move
-	 * */
-	public void fling(MotionEvent event1,MotionEvent event2, float velx, float vely){
-		if(Math.abs(velx)>Math.abs(vely)){///horizontal fling
-			if(velx<0){//TO left fling
-				Log.i("fling", "left");
-			}else{//TO right fling
-				Log.i("fling", "right");
-			}
-		}else{///vertical fling
-			if(vely<0){
-				Log.i("fling", "up");
-			}else{
-				Log.i("fling", "down");
-			}
-		}
-	}
+ 
 	 /**
      * method to add line of blocks if pass any time
      * */
   /*  private void addline(){
         for(int i=0;i<blocs.size();i++){
-            block b=blocs.get(i);
+            Block b=blocs.get(i);
             if(!b.stat){
                 b.y--;
                 table[b.x][b.y].color=b.color;
@@ -318,7 +300,7 @@ public class GameLevel extends SceneBase {
         }   
         for(int i=1;i<7;i++){
             int c=getColorWithRandom(r.nextInt(5)+1);
-            block b=new block(i,15,c,this);
+            Block b=new Block(i,15,c,this);
             b.arrived=true;
             blocs.add(b);
             table[i][15].color=c;
@@ -368,6 +350,58 @@ public class GameLevel extends SceneBase {
 	@Override
 	protected void onflingScene(MotionEvent event1, MotionEvent event2,
 			float velocityX, float velocityY) {
+		int px=(int)event1.getRawX();
+		int py=(int)event1.getRawY();
+		int indexX= (int)(px+block_size)/block_size;
+		int indexY= (int)(py+block_size)/block_size-1;
+		
+		if(Math.abs(velocityX)>Math.abs(velocityY)){///horizontal fling
+			if(velocityX<0){//TO left fling
+				moveBlockTo(indexX,indexY,0);
+			}else{//TO right fling
+				moveBlockTo(indexX,indexY,2);
+			}
+		}else{///vertical fling
+			if(velocityY<0){
+				moveBlockTo(indexX,indexY,1);
+			}else{
+				moveBlockTo(indexX,indexY,3);
+			}
+		}
 		//TODO put behavoiur here
+	}
+	
+	private void moveBlockTo(int x, int y, int dir){
+		Log.i("touched", "index:"+x+","+y+ " dir "+dir);
+		Block changeblock=table[x][y];
+		if(changeblock==null)return;
+		switch(dir){
+		case 0:
+			if(x<2)return;
+			if(table[x-1][y]==null)return;
+			table[x][y]=table[x-1][y];
+			table[x-1][y]=changeblock;
+			break;
+		case 1:
+			if(y<2)return;
+			if(table[x][y-1]==null)return;
+			table[x][y]=table[x][y-1];
+			table[x][y-1]=changeblock;
+			break;
+		case 2:
+			if(x>num_blocks-1)return;
+			if(table[x+1][y]==null)return;
+			table[x][y]=table[x+1][y];
+			table[x+1][y]=changeblock;
+			break;
+		case 3:
+			if(y>num_block_vert-2)return;
+			if(table[x][y+1]==null)return;
+			table[x][y]=table[x][y+1];
+			table[x][y+1]=changeblock;
+			break;
+		}
+		
+		//Block b= findBlock(x,y);
 	}
 }

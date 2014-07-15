@@ -20,23 +20,26 @@ public abstract class SceneBase {
  	GestureDetector detector;
 	public SceneBase(){
 		buttons=new ArrayList<GameButton>();
-		detector=new GestureDetector(AtackTris.mthis,new GestureDetector.SimpleOnGestureListener(){
-            @Override
-            public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            	onflingScene(event1,event2, velocityX,velocityY);
-                return true;
-            }
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-            	clicOn(e);
-            	return true;
-            }
-            @Override
-            public boolean onDown(MotionEvent e) {
-                  return true;
-            }
-        });
-        
+		AtackTris.mthis.runOnUiThread(new Runnable(){
+			@Override
+			public void run() {
+				detector=new GestureDetector(AtackTris.mthis,new GestureDetector.SimpleOnGestureListener(){
+		            @Override
+		            public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+		            	onflingScene(event1,event2, velocityX,velocityY);
+		                return true;
+		            }
+		            @Override
+		            public boolean onSingleTapUp(MotionEvent e) {
+		            	clicOn(e);
+		            	return true;
+		            }
+		            @Override
+		            public boolean onDown(MotionEvent e) {
+		                  return true;
+		            }
+		        });
+			}});      
 	}
 	public void updateScene(){
 		if(isLoading)
