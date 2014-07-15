@@ -119,17 +119,17 @@ public class MySurface extends SurfaceView implements Runnable,
 	    public void paintpaused(ArrayList<GameButton> buttons){
 	    	
 	    }
-	    public void paintend(ArrayList<GameButton> buttons){
-	   /*    Graphics2D gp=(Graphics2D)paint.getGraphics();
+	    /*  public void paintend(ArrayList<GameButton> buttons){
+	       Graphics2D gp=(Graphics2D)paint.getGraphics();
 	         gp.drawImage((BufferedImage)cache.get("go"),0,0, this);//paint background
 	         gp.setColor(Color.white);
 	         gp.drawString("Final Points:"+playerpoints,140, 300);
 	         gp.dispose();
 	        Graphics g=this.getGraphics();
-	        g.drawImage(paint,0,0, this);*/
+	        g.drawImage(paint,0,0, this);
 	    	for(GameButton btn:buttons){
 	    		btn.Draw(tmpCanvas);
 	    	}
-	    } //paint game over and the final score   
+	    } *///paint game over and the final score   
 	    
 }

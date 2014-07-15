@@ -3,7 +3,10 @@ package org.freegame.models;
 
 import java.util.ArrayList;
 
+import org.freegame.attacktis.AtackTris;
+
 import android.graphics.Canvas;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 /**
@@ -14,8 +17,26 @@ public abstract class SceneBase {
 	protected ArrayList<GameButton> buttons;
 	protected boolean isLoading=true;
 	boolean isInitialized=false;
+ 	GestureDetector detector;
 	public SceneBase(){
 		buttons=new ArrayList<GameButton>();
+		detector=new GestureDetector(AtackTris.mthis,new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+            	onflingScene(event1,event2, velocityX,velocityY);
+                return true;
+            }
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+            	clicOn(e);
+            	return true;
+            }
+            @Override
+            public boolean onDown(MotionEvent e) {
+                  return true;
+            }
+        });
+        
 	}
 	public void updateScene(){
 		if(isLoading)
@@ -50,5 +71,9 @@ public abstract class SceneBase {
 				}
 			}
 		}
-	}	
+	}
+	protected void onflingScene(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY){};
+	public void touchEvent(MotionEvent event){
+		detector.onTouchEvent(event);
+	}
 }

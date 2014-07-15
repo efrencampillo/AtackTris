@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -39,6 +40,9 @@ public class GameLevel extends SceneBase {
   	public int num_blocks=6;
   	public int block_size;
   	public int block_height;
+  	
+ 
+  	
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#loadScene()
 	 */
@@ -52,6 +56,8 @@ public class GameLevel extends SceneBase {
         figure=new ArrayList<block>();
         createinitialtable();
         r=new Random();
+        
+        
         isLoading=false;
 	}
 
@@ -355,5 +361,13 @@ public class GameLevel extends SceneBase {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		
+	}
+	/* (non-Javadoc)
+	 * @see org.freegame.models.SceneBase#onflingScene(android.view.MotionEvent, android.view.MotionEvent, float, float)
+	 */
+	@Override
+	protected void onflingScene(MotionEvent event1, MotionEvent event2,
+			float velocityX, float velocityY) {
+		//TODO put behavoiur here
 	}
 }
