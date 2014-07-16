@@ -4,6 +4,8 @@ package org.freegame.levels;
 import java.util.ArrayList;
 
 import org.freegame.attacktis.AtackTris;
+import org.freegame.game.GameActivity;
+import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
 import org.freegame.models.SceneBase;
 
@@ -32,17 +34,18 @@ public class MainMenu extends SceneBase {
 	@Override
 	public void loadScene() {
 		// TODO add buttons
-		
-		 GameButton start=new GameButton(AtackTris.mrender.sWidth/3,AtackTris.mrender.sHeight/3,AtackTris.mrender.sWidth/3,50);
+		int width=GameSurface.sWidth;
+		int height=GameSurface.sHeight;
+		GameButton start=new GameButton(width/3,height/3,width/3,50);
  		start.text="Start Game";
  		start.setAction(new Runnable(){
 				@Override
 				public void run() {
-					AtackTris.mthis.startGame();
+					startGame();
 				}});
  		buttons.add(start);
  		
- 		GameButton quit=new GameButton(AtackTris.mrender.sWidth/3,AtackTris.mrender.sHeight*2/3,AtackTris.mrender.sWidth/3,50);
+ 		GameButton quit=new GameButton(width/3,height*2/3,width/3,50);
  		quit.text="Exit";
  		quit.setAction(new Runnable(){
 				@Override
@@ -121,4 +124,8 @@ public class MainMenu extends SceneBase {
 		// TODO Auto-generated method stub
 		
 	}
+	public void startGame(){
+    	GameLevel game=new GameLevel();
+    	GameActivity.mthis.AddSceneToStack(game);
+    }
 }

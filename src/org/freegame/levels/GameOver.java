@@ -2,32 +2,24 @@
 package org.freegame.levels;
 
 import org.freegame.attacktis.AtackTris;
+import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
-import android.view.KeyEvent;
 
 /**
  * @author kuno
  *
  */
-public class PausedGame extends SceneBase {
+public class GameOver extends SceneBase {
 
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#loadScene()
 	 */
 	@Override
 	public void loadScene() {
-		GameButton resume=new GameButton(AtackTris.mrender.sWidth/3,AtackTris.mrender.sHeight/3,AtackTris.mrender.sWidth/3,50);
-		resume.text="Resume Game";
-		resume.setAction(new Runnable(){
-			@Override
-			public void run() {
-				AtackTris.mthis.popSceneFromStack();
-			}});
-		buttons.add(resume);	
-		GameButton restart=new GameButton(AtackTris.mrender.sWidth/3,AtackTris.mrender.sHeight/2,AtackTris.mrender.sWidth/3,50);
+		GameButton restart=new GameButton(GameSurface.sWidth/3,GameSurface.sHeight/2,GameSurface.sWidth/3,50);
 		restart.text="Restart Game";
 		restart.setAction(new Runnable(){
 			@Override
@@ -38,7 +30,7 @@ public class PausedGame extends SceneBase {
 			}});
 		buttons.add(restart);
 		
-		GameButton quitlevel=new GameButton(AtackTris.mrender.sWidth/3,AtackTris.mrender.sHeight*2/3,AtackTris.mrender.sWidth/3,50);
+		GameButton quitlevel=new GameButton(GameSurface.sWidth/3,GameSurface.sHeight*2/3,GameSurface.sWidth/3,50);
 		quitlevel.text="Exit Game";
 		quitlevel.setAction(new Runnable(){
 			@Override
@@ -58,7 +50,16 @@ public class PausedGame extends SceneBase {
 		// TODO Auto-generated method stub
 
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.freegame.models.SceneBase#destroyScene()
+	 */
+	@Override
+	public void destroyScene() {
+		// TODO Auto-generated method stub
+
+	}
+
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#paintLoading(android.graphics.Canvas)
 	 */
@@ -73,31 +74,16 @@ public class PausedGame extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {
-		for(GameButton btn:buttons){
-			btn.Draw(c);
-    	}
+		for(GameButton btn:buttons)btn.Draw(c);
 	}
 
-	
-
-	/* (non-Javadoc)
-	 * @see org.freegame.models.SceneBase#destroyScene()
-	 */
-	@Override
-	public void destroyScene() {
-		// TODO Auto-generated method stub
-
-	}
-
-	
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#onKeyDown(int)
 	 */
 	@Override
 	public void onKeyDown(int keydown) {
-		if(keydown==KeyEvent.KEYCODE_BACK){
-			//TODO pop scene
-		}
+		// TODO Auto-generated method stub
+
 	}
 
 	/* (non-Javadoc)
@@ -106,7 +92,7 @@ public class PausedGame extends SceneBase {
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -115,7 +101,7 @@ public class PausedGame extends SceneBase {
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

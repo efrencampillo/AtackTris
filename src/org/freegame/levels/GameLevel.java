@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.freegame.attacktis.AtackTris;
-import org.freegame.attacktis.MySurface;
+import org.freegame.game.GameSurface;
 import org.freegame.models.SceneBase;
 import org.freegame.models.Block;
 
@@ -47,8 +47,8 @@ public class GameLevel extends SceneBase {
 	 */
 	@Override
 	public void loadScene() {
-		block_size=MySurface.sWidth/num_blocks;
-		num_block_vert=MySurface.sHeight/block_size;
+		block_size=GameSurface.sWidth/num_blocks;
+		num_block_vert=GameSurface.sHeight/block_size;
 		linextra=System.currentTimeMillis();
 		ttime=System.currentTimeMillis();
         blocs=new ArrayList<Block>();
@@ -77,7 +77,7 @@ public class GameLevel extends SceneBase {
     	p.setColor(Color.BLACK);
     	p.setTextSize(30);
     	p.setTextAlign(Paint.Align.CENTER);
-    	c.drawText("Loading...", MySurface.sWidth/2,MySurface.sHeight/2, p);
+    	c.drawText("Loading...", GameSurface.sWidth/2,GameSurface.sHeight/2, p);
 	}
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#drawScene(android.graphics.Canvas)
@@ -332,7 +332,7 @@ public class GameLevel extends SceneBase {
 	 */
 	@Override
 	public void onPause() {
-		PausedGame paused=new PausedGame();
+		GameLevelPaused paused=new GameLevelPaused();
 		AtackTris.mthis.AddSceneToStack(paused);
 	}
 

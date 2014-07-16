@@ -1,8 +1,9 @@
 
-package org.freegame.attacktis;
+package org.freegame.game;
 
 import java.util.ArrayList;
 
+import org.freegame.attacktis.AtackTris;
 import org.freegame.models.GameButton;
 import org.freegame.models.Block;
 
@@ -25,7 +26,7 @@ import android.view.View;
  * @author kuno
  *
  */
-public class MySurface extends SurfaceView implements Runnable, 
+public class GameSurface extends SurfaceView implements Runnable, 
 	SurfaceHolder.Callback{
 	 
 	Thread mythread;//thread that calls paint
@@ -46,7 +47,7 @@ public class MySurface extends SurfaceView implements Runnable,
 	/**
 	 * @param surfaceTexture
 	 */
-	public MySurface(Context ctx) {
+	public GameSurface(Context ctx) {
 		super(ctx);
 		context=ctx;
 		getHolder().addCallback(this);
@@ -71,7 +72,7 @@ public class MySurface extends SurfaceView implements Runnable,
 	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder surface) {
-		Log.i("Surface","Created");
+		//Log.i("Surface","Created");
 	}
 	
 	/* (non-Javadoc)
@@ -116,9 +117,6 @@ public class MySurface extends SurfaceView implements Runnable,
 	      }
 	}
 	
-	    public void paintpaused(ArrayList<GameButton> buttons){
-	    	
-	    }
 	    /*  public void paintend(ArrayList<GameButton> buttons){
 	       Graphics2D gp=(Graphics2D)paint.getGraphics();
 	         gp.drawImage((BufferedImage)cache.get("go"),0,0, this);//paint background
