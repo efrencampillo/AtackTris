@@ -4,6 +4,7 @@ package org.freegame.levels;
 import org.freegame.attacktis.AtackTris;
 import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
+import org.freegame.models.SceneActor;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
@@ -27,7 +28,7 @@ public class GameLevelPaused extends SceneBase {
 			public void run() {
 				AtackTris.mthis.popSceneFromStack();
 			}});
-		buttons.add(resume);	
+		actors.add(resume);	
 		GameButton restart=new GameButton(GameSurface.sWidth/3,GameSurface.sHeight/2,GameSurface.sWidth/3,50);
 		restart.text="Restart Game";
 		restart.setAction(new Runnable(){
@@ -37,7 +38,7 @@ public class GameLevelPaused extends SceneBase {
 				GameLevel game=(GameLevel)AtackTris.mthis.getCurrentScene();
 				game.restartGame();
 			}});
-		buttons.add(restart);
+		actors.add(restart);
 		
 		GameButton quitlevel=new GameButton(GameSurface.sWidth/3,GameSurface.sHeight*2/3,GameSurface.sWidth/3,50);
 		quitlevel.text="Exit Game";
@@ -47,7 +48,7 @@ public class GameLevelPaused extends SceneBase {
 				AtackTris.mthis.popSceneFromStack();
 				AtackTris.mthis.popSceneFromStack();
 			}});
-		buttons.add(quitlevel);
+		actors.add(quitlevel);
 		isLoading=false;
 	}
 
@@ -74,7 +75,8 @@ public class GameLevelPaused extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {
-		for(GameButton btn:buttons)btn.Draw(c);
+
+		
 	}
 
 	

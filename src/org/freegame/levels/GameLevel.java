@@ -12,6 +12,7 @@ import org.freegame.models.Block;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.Log;
 
 import android.view.KeyEvent;
@@ -24,7 +25,8 @@ import android.view.MotionEvent;
 public class GameLevel extends SceneBase {
 
 	public ArrayList<Block> blocs;
-    public ArrayList<Block> figure;
+    public ArrayList<Point> figure;
+    public ArrayList<Point> removeBlocks;
     public ArrayList<Block> casc=new ArrayList<Block>();
     public Block[][] table;//the grid for the blocs in the game
 
@@ -52,10 +54,10 @@ public class GameLevel extends SceneBase {
 		linextra=System.currentTimeMillis();
 		ttime=System.currentTimeMillis();
         blocs=new ArrayList<Block>();
-        figure=new ArrayList<Block>();
+        figure=new ArrayList<Point>();
         createinitialtable();
         r=new Random();
-        
+        removeBlocks=new ArrayList<Point>();
         
         isLoading=false;
 	}
@@ -65,8 +67,10 @@ public class GameLevel extends SceneBase {
 	 */
 	@Override
 	public void stepScene() {
-		 genblock();
-         movebloc();
+		movebloc();
+		removeBlocks();
+		genblock();
+       
 	}
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#paintLoading(android.graphics.Canvas)
@@ -84,34 +88,16 @@ public class GameLevel extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {		
-		  Paint p=new Paint();	  
 		  for(int i=1;i<num_blocks+1;i++){
 			  for(int j=num_block_vert-1;j>=0;j--){
-				 if(table[i][j]!=null&&table[i][j].color!=6){
-					 p.setStyle(Paint.Style.FILL);
-					 p.setColor(table[i][j].color);
-					 c.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
-					 p.setStyle(Paint.Style.STROKE);
-					 p.setColor(Color.BLACK); 
-					 p.setStrokeWidth(2);
-					 c.drawRect((i-1)*block_size, (j+1)*block_size,(i)*block_size ,j*block_size, p);
-					
+				 if(table[i][j]!=null&&table[i][j].color!=6){			
+					table[i][j].x=(i-1)*block_size;
+					table[i][j].y=(j)*block_size;
+					table[i][j].draw(c);
 				 }
 			  }
 		  }
-	           
-	     /*      
-	            if(!point.status)gp.drawImage((BufferedImage)cache.get("cursor"),(point.x-1)*33+10,point.y*33+20, this);//paint cursor
-	            else gp.drawImage((BufferedImage)cache.get("cursors"),(point.x-1)*33+10,point.y*33+20, this);
-	            gp.drawRect(5,10, 210, 545);
-	            gp.drawString("Seconds remaining="+(int)((btime-time)/1000),100,570);
-	            long elapsed = System.currentTimeMillis() - start;// total time elpased for create the image
-	            gp.drawString("tardo:"+elapsed+" mls", 15, 570);
-	            gp.drawString("puntos:"+playerpoints, 220, 40);
-	            gp.drawString("uc:"+cascada, 220, 70);
-	            gp.dispose();//draw in Buffered Image        
-	            Graphics g=this.getGraphics();//draw in screen
-	            g.drawImage(paint,0,0, this);   */     
+	               
 		  time=System.currentTimeMillis()-init;
           if(time>btime){
               tmove-=50;//increasing speed of falling blocks
@@ -161,20 +147,20 @@ public class GameLevel extends SceneBase {
         if(checbloc()){
             int nx=r.nextInt(num_blocks-1)+1; //create coordenate x:range(1:5)
             int nc=getColorWithRandom(r.nextInt(5)+1); //create color
-            table[nx][0]=new Block(nc,this);
+            table[nx][0]=new Block(nc,this,block_size);
             table[nx][0].color=nc;
             nc=getColorWithRandom(r.nextInt(5)+1);
-            table[nx+1][0]=new Block(nc,this);
+            table[nx+1][0]=new Block(nc,this,block_size);
             table[nx+1][0].color=nc;
         }
      }
      public void genbloctime(){
          int nx=r.nextInt(num_blocks-1)+1;
          int nc=getColorWithRandom(r.nextInt(5)+1);
-         table[nx][0]=new Block(nc,this);
+         table[nx][0]=new Block(nc,this,block_size);
          table[nx][0].color=nc;
          nc=getColorWithRandom(r.nextInt(5)+1);
-         table[nx+1][0]=new Block(nc,this);
+         table[nx+1][0]=new Block(nc,this,block_size);
          table[nx+1][0].color=nc;
      }
      private boolean checbloc(){///check if all the blocs are static
@@ -219,74 +205,65 @@ public class GameLevel extends SceneBase {
     public void remove(int x, int y){//remover blocs
        table[x][y]=null;
     }
+    
+    int deepLook=0;
     /**
      *  metod for find tetris figures has recursivity
      * */
-     public void checfigure1(int x,int y){
-       
-        figure.add(table[x][y]);
-       // if((figure.size()>3)){return;}
-        if(table[x][y-1]!=null)
-        if(table[x][y-1].color==table[x][y].color && !figure.contains(table[x][y-1])){ ///chek up blocks
-          //  dir--;         
-            checfigure1(x,y-1);
+    public void checkFigure(int x,int y){ 
+        if(isMarkedBlock(x, y))return;
+        deepLook++;
+        if(deepLook==1)Log.d("checking", "coord:"+x+","+y+" Color:"+table[x][y].color);
+        figure.add(new Point(x,y));
+        if(y>1&&table[x][y-1]!=null && 
+           table[x][y-1].color==table[x][y].color){ ///chek up blocks         
+            checkFigure(x,y-1);
         }
-        if(table[x+1][y]!=null)
-        if(table[x+1][y].color==table[x][y].color && !figure.contains(table[x+1][y])){//chek right blocks
-       //     dir--;
-            checfigure1(x+1,y);
+        if(table[x+1][y]!=null &&
+           table[x+1][y].color==table[x][y].color){//chek right blocks
+            checkFigure(x+1,y);
         }
-        if(table[x][y+1]!=null)
-        if(table[x][y+1].color==table[x][y].color && !figure.contains(table[x][y+1])){///check down Block
-           // dir--;                  
-            checfigure1(x,y+1);
+        if(table[x][y+1]!=null &&
+           table[x][y+1].color==table[x][y].color){///check down Block                
+            checkFigure(x,y+1);
         }
-        if(table[x-1][y]!=null)
-        if(table[x-1][y].color==table[x][y].color && !figure.contains(table[x-1][y])){///check Left Block
-        //    dir--;                        
-            checfigure1(x-1,y);
-        }  
-        if(figure.size()>3){
-           removefigure(); 
-       }else{
-           figure=new ArrayList<Block>();
-           
-       }
+        if(x>1&&table[x-1][y]!=null &&
+           table[x-1][y].color==table[x][y].color){///check Left Block                   
+            checkFigure(x-1,y);
+        }   
+        if(deepLook==1){
+        	if(figure.size()>3){
+        		removefigure(figure);
+        	}
+        	figure.clear();
+        }
+        deepLook--;
    }
-   public void removefigure(){
-         /*   boolean bloccasc=false;
-            for(int i=0;i<figure.size();i++){
-                Block b=figure.get(i);
-                Block d=get(b.x,b.y-1);
-                if(casc.contains(b)){casc.remove(b);bloccasc=true;}
-                if(d!=null&&!figure.contains(d)&&!casc.contains(d))
-                    casc.add(d);
-                	remove(b);
-    	        }
-    	        if(bloccasc)cascada++;
-    	        else cascada=0;
-    	        figure=new ArrayList<Block>();
-    	        playerpoints++;*/
-  	} //remove blocks from figures created
-      
-    public void change(int bx,int by,int px,int py){   //change bolcs position
-        /*    Block a=null;
-            Block n=null;
-            for(int i=0;i<blocs.size();i++){
-                Block b=blocs.get(i);
-                if(b.x==bx&&b.y==by){a=b;}
-                if(b.x==px&&b.y==py){n=b;}
-            }
-            int c=a.color;
-            a.color=n.color;
-            n.color=c;
-            table[a.x][a.y].color=a.color;
-            table[n.x][n.y].color=n.color;
-            if(!this.lineexplode(a.y)){checfigure1(a,0);}
-            if(!this.lineexplode(n.y)){checfigure1(n,0);}*/
-    }//change blocs position
-    
+    /**
+      * remove blocks from figures created
+      * */
+   public void removefigure(ArrayList<Point> tmpmarked){
+	   removeBlocks.addAll(tmpmarked);
+	   Log.w("removeBlock","size:"+tmpmarked.size()+" points:"+tmpmarked.toString());
+  	} 
+   /**
+    * check existent block 
+    * */
+   public boolean isMarkedBlock(int x, int y){
+	   for(Point p:figure)
+		   if(p.x==x&&p.y==y)return true;
+	   return false;
+   }    
  
+   /**
+    * removeBlocks
+    * */
+   private void removeBlocks(){
+	   for(Point p:removeBlocks){
+		   table[p.x][p.y]=null;
+	   }
+	   removeBlocks.clear();
+   }
 	 /**
      * method to add line of blocks if pass any time
      * */
@@ -381,24 +358,32 @@ public class GameLevel extends SceneBase {
 			if(table[x-1][y]==null)return;
 			table[x][y]=table[x-1][y];
 			table[x-1][y]=changeblock;
+			checkFigure(x,y);
+			checkFigure(x-1,y);
 			break;
 		case 1:
 			if(y<2)return;
 			if(table[x][y-1]==null)return;
 			table[x][y]=table[x][y-1];
 			table[x][y-1]=changeblock;
+			checkFigure(x,y);
+			checkFigure(x,y-1);
 			break;
 		case 2:
 			if(x>num_blocks-1)return;
 			if(table[x+1][y]==null)return;
 			table[x][y]=table[x+1][y];
 			table[x+1][y]=changeblock;
+			checkFigure(x,y);
+			checkFigure(x+1,y);
 			break;
 		case 3:
 			if(y>num_block_vert-2)return;
 			if(table[x][y+1]==null)return;
 			table[x][y]=table[x][y+1];
 			table[x][y+1]=changeblock;
+			checkFigure(x,y);
+			checkFigure(x,y+1);
 			break;
 		}
 		

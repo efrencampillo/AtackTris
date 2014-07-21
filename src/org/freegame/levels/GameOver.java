@@ -4,6 +4,7 @@ package org.freegame.levels;
 import org.freegame.attacktis.AtackTris;
 import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
+import org.freegame.models.SceneActor;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
@@ -28,7 +29,7 @@ public class GameOver extends SceneBase {
 				GameLevel game=(GameLevel)AtackTris.mthis.getCurrentScene();
 				game.restartGame();
 			}});
-		buttons.add(restart);
+		actors.add(restart);
 		
 		GameButton quitlevel=new GameButton(GameSurface.sWidth/3,GameSurface.sHeight*2/3,GameSurface.sWidth/3,50);
 		quitlevel.text="Exit Game";
@@ -38,7 +39,7 @@ public class GameOver extends SceneBase {
 				AtackTris.mthis.popSceneFromStack();
 				AtackTris.mthis.popSceneFromStack();
 			}});
-		buttons.add(quitlevel);
+		actors.add(quitlevel);
 		isLoading=false;
 	}
 
@@ -74,7 +75,7 @@ public class GameOver extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {
-		for(GameButton btn:buttons)btn.Draw(c);
+		
 	}
 
 	/* (non-Javadoc)

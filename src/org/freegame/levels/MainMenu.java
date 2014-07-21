@@ -7,6 +7,7 @@ import org.freegame.attacktis.AtackTris;
 import org.freegame.game.GameActivity;
 import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
+import org.freegame.models.SceneActor;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
@@ -43,7 +44,7 @@ public class MainMenu extends SceneBase {
 				public void run() {
 					startGame();
 				}});
- 		buttons.add(start);
+ 		actors.add(start);
  		
  		GameButton quit=new GameButton(width/3,height*2/3,width/3,50);
  		quit.text="Exit";
@@ -52,7 +53,7 @@ public class MainMenu extends SceneBase {
 				public void run() {
 					System.exit(0);
 				}});
- 		buttons.add(quit);
+ 		actors.add(quit);
  		isLoading=false;
 	}
 	/* (non-Javadoc)
@@ -83,9 +84,7 @@ public class MainMenu extends SceneBase {
     	tmpCanvas.drawText("Start Game", sWidth/2, sHeight/3,p );
     	p.setStyle(Paint.Style.STROKE);
     	tmpCanvas.drawRect(sWidth/3-20, sHeight/3-40,sWidth*2/3+20,sHeight/3+20,p );*/
-    	for(GameButton btn:buttons){
-    		btn.Draw(c);
-    	}
+    	
     	//TODO paint more things
 	}
 

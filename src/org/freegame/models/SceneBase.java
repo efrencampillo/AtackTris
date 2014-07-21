@@ -14,12 +14,12 @@ import android.view.MotionEvent;
  *
  */
 public abstract class SceneBase {
-	protected ArrayList<GameButton> buttons;
+	protected ArrayList<SceneActor> actors;
 	protected boolean isLoading=true;
 	boolean isInitialized=false;
  	GestureDetector detector;
 	public SceneBase(){
-		buttons=new ArrayList<GameButton>();
+		actors=new ArrayList<SceneActor>();
 		AtackTris.mthis.runOnUiThread(new Runnable(){
 			@Override
 			public void run() {
@@ -44,8 +44,11 @@ public abstract class SceneBase {
 	public void updateScene(){
 		if(isLoading)
 			loadScene();
-		else
+		else{
+			for(SceneActor act:actors)act.update();
 			stepScene();
+		}
+			
 		
 	}
 	public abstract void loadScene();
@@ -58,6 +61,7 @@ public abstract class SceneBase {
 			paintLoading(c);
 		}else{
 			drawScene(c);
+			for(SceneActor act:actors)act.draw(c);
 		}
 	}
 	
@@ -67,10 +71,10 @@ public abstract class SceneBase {
 	public void clicOn(MotionEvent evt) {
 		int cx=(int) evt.getX();
 		int cy=(int) evt.getY();
-		for(GameButton btn:buttons){
-			if(cx>btn.x&&cx<(btn.w+btn.x)){
-				if(cy>btn.y&&cy<(btn.h+btn.y)){
-					btn.onclick();
+		for(SceneActor btn:actors){
+			if(cx>btn.x&&cx<(btn.width+btn.x)){
+				if(cy>btn.y&&cy<(btn.height+btn.y)){
+					btn.onClick();
 				}
 			}
 		}

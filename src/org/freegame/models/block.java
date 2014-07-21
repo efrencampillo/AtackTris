@@ -1,14 +1,17 @@
 package org.freegame.models;
 
-import org.freegame.attacktis.AtackTris;
 import org.freegame.levels.GameLevel;
+
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 
 /**
  * class Block
  * this class has the behaviour to down every turn
  * */
-public class Block {
+public class Block extends SceneActor{
 
     public boolean isStatic=false;
     public boolean arrived=false;// blocstat 0=static,1=falling
@@ -18,7 +21,8 @@ public class Block {
 /**
  * construct for be falling
  * */
-    public Block(int C,GameLevel g){
+    public Block(int C,GameLevel g,int blocksize){
+    	super(0,0,blocksize,blocksize);
         color=C;
         isStatic=false;
         game=g;
@@ -28,6 +32,7 @@ public class Block {
      * construct for Block downing
      * */
     public Block(GameLevel g){
+    	super(0,0,0,0);
         color=6;
         isStatic=true;
         game=g;
@@ -60,4 +65,31 @@ public class Block {
             }
 
     }
+	/* (non-Javadoc)
+	 * @see org.freegame.models.SceneActor#onClick()
+	 */
+	@Override
+	public void onClick() {
+		// TODO Auto-generated method stub
+		
+	}
+	/* (non-Javadoc)
+	 * @see org.freegame.models.SceneActor#draw(android.graphics.Canvas)
+	 */
+	@Override
+	public void draw(Canvas c) {
+		Paint p=new Paint();	
+		p.setStyle(Paint.Style.FILL);
+		p.setColor(color);
+		c.drawRect(x,y,x+width ,y+height, p);
+		p.setStyle(Paint.Style.STROKE);
+		p.setColor(Color.BLACK); 
+		p.setStrokeWidth(2);
+		c.drawRect(x,y,x+width ,y+height, p);
+	}
+	/* (non-Javadoc)
+	 * @see org.freegame.models.SceneActor#update()
+	 */
+	@Override
+	public void update() {}
 }

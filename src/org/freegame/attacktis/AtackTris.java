@@ -1,17 +1,11 @@
 package org.freegame.attacktis;
 
 
-import java.util.ArrayList;
 
 import org.freegame.game.GameActivity;
-import org.freegame.game.GameSurface;
-import org.freegame.levels.GameLevel;
-import org.freegame.levels.MainMenu;
 import org.freegame.models.SceneBase;
 
 
-import android.app.Activity;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
