@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.freegame.attacktis.AtackTris;
 import org.freegame.levels.MainMenu;
 import org.freegame.models.SceneBase;
+import org.freegame.utils.ImageManager;
 
 import android.app.Activity;
 import android.graphics.Canvas;
@@ -29,6 +30,7 @@ public class GameActivity extends Activity {
 		scenes= new ArrayList<SceneBase>();
 		setContentView(mrender);
 		mthis=this;
+		ImageManager.Initialize(this);
 	}
 	/* (non-Javadoc)
      * @see android.app.Activity#onPause()
