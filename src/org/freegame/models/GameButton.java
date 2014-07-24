@@ -1,10 +1,13 @@
 
 package org.freegame.models;
 
+import org.freegame.attacktis.AtackTris;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 /**
@@ -16,8 +19,10 @@ public class GameButton extends SceneActor {
 	public String text="";//text to show
 	public int textSize=25;
 	public GameButton(int px,int py, int lx/*length in x*/,int ly/*length in y*/){
-		super(px,py,lx,ly);
-		
+		super(px,py,lx,ly);	
+		DisplayMetrics metrics = AtackTris.mthis.getResources().getDisplayMetrics();
+		float density=metrics.density;
+		height*=density;
 	}
 	
 	/**

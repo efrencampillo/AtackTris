@@ -8,6 +8,9 @@ import org.freegame.models.SceneActor;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.Log;
 import android.view.KeyEvent;
 
 /**
@@ -75,7 +78,11 @@ public class GameLevelPaused extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {
-
+		SceneBase background=AtackTris.mthis.getScene(deepIndex-1);
+		if(background!=null)background.paintScene(c);
+		Paint p=new Paint();
+		p.setColor(Color.parseColor("#77000000"));
+		c.drawRect(0, 0, GameSurface.sWidth,GameSurface.sHeight, p);
 		
 	}
 
@@ -98,6 +105,7 @@ public class GameLevelPaused extends SceneBase {
 	public void onKeyDown(int keydown) {
 		if(keydown==KeyEvent.KEYCODE_BACK){
 			//TODO pop scene
+			AtackTris.mthis.popSceneFromStack();
 		}
 	}
 

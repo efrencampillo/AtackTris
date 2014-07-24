@@ -11,6 +11,7 @@ import org.freegame.utils.ImageManager;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * @author kuno
@@ -66,6 +67,7 @@ public class GameActivity extends Activity {
  	 * this method put the scene to the stack of scenes
  	 * */
  	public void AddSceneToStack(SceneBase scene){
+ 		scene.deepIndex=scenes.size();
     	scenes.add(scene);
     }
  	/**
@@ -74,6 +76,12 @@ public class GameActivity extends Activity {
     public void popSceneFromStack(){
     	if(scenes.size()>1)scenes.remove(scenes.size()-1);
     }
+    public SceneBase getScene(int index){
+    	if(index<=scenes.size())
+    		return scenes.get(index);
+    	return null;
+    }
+    
     /**
      * this method os called by the gamesurface to update the game
      * */

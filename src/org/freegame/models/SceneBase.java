@@ -18,6 +18,7 @@ public abstract class SceneBase {
 	protected boolean isLoading=true;
 	boolean isInitialized=false;
  	GestureDetector detector;
+ 	public int deepIndex=0;
 	public SceneBase(){
 		actors=new ArrayList<SceneActor>();
 		AtackTris.mthis.runOnUiThread(new Runnable(){
