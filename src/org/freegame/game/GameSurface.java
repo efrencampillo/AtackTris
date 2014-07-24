@@ -1,26 +1,18 @@
 
 package org.freegame.game;
 
-import java.util.ArrayList;
-
 import org.freegame.attacktis.AtackTris;
-import org.freegame.models.GameButton;
-import org.freegame.models.Block;
-
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
 import android.graphics.Bitmap.Config;
-import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
+
 
 /**
  * @author kuno
@@ -117,17 +109,6 @@ public class GameSurface extends SurfaceView implements Runnable,
 	      }
 	}
 	
-	    /*  public void paintend(ArrayList<GameButton> buttons){
-	       Graphics2D gp=(Graphics2D)paint.getGraphics();
-	         gp.drawImage((BufferedImage)cache.get("go"),0,0, this);//paint background
-	         gp.setColor(Color.white);
-	         gp.drawString("Final Points:"+playerpoints,140, 300);
-	         gp.dispose();
-	        Graphics g=this.getGraphics();
-	        g.drawImage(paint,0,0, this);
-	    	for(GameButton btn:buttons){
-	    		btn.Draw(tmpCanvas);
-	    	}
-	    } *///paint game over and the final score   
+	 
 	    
 }

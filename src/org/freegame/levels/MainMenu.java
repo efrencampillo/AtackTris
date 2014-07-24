@@ -1,17 +1,12 @@
 
 package org.freegame.levels;
 
-import java.util.ArrayList;
-
-import org.freegame.attacktis.AtackTris;
 import org.freegame.game.GameActivity;
 import org.freegame.game.GameSurface;
 import org.freegame.models.GameButton;
-import org.freegame.models.SceneActor;
 import org.freegame.models.SceneBase;
 
 import android.graphics.Canvas;
-import android.view.MotionEvent;
 
 /**
  * @author kuno
