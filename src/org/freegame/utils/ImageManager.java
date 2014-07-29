@@ -1,6 +1,8 @@
 
 package org.freegame.utils;
 
+import java.net.URI;
+
 import org.freegame.models.SceneActor;
 
 import android.content.Context;
@@ -49,7 +51,7 @@ public class ImageManager {
 	/**
 	 * this method load the images from resources in a asyncktask
 	 * */
-	public void LoadBitmap(int resId, SceneActor actor) {
+	public void LoadBitmapFromRes(int resId, SceneActor actor) {
 	    final String imageKey = String.valueOf(resId);
 
 	    final Bitmap bitmap = getBitmapFromMemCache(imageKey);
@@ -62,20 +64,51 @@ public class ImageManager {
 	}
 	
 	/**
+	 * this method load the images from Uri in a asyncktask
+	 * */
+	public void LoadBitmapFromURI(URI res, SceneActor actor) {
+	    final String imageKey =res.toString();
+
+	    final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+	    if (bitmap != null) {
+	        actor.ActualTexture=bitmap;
+	    } else {
+	    	BitmapWorkerFromURLTask task = new BitmapWorkerFromURLTask(actor);
+	        task.execute(imageKey);
+	    }
+	}
+	/**
 	 * this class loads the image in background and put in the memory pool also
 	 * set it in the scene actor
 	 * */
 	class BitmapWorkerTask extends AsyncTask<Integer, Void, String> {
 		SceneActor actor;
 		public boolean pending=true;
-		public BitmapWorkerTask(SceneActor act){
-			actor=act;
-		}
+		public BitmapWorkerTask(SceneActor act){ actor=act;	}
 	    //...
 	    // Decode image in background.
 	    @Override
 	    protected String doInBackground(Integer... params) {
 	        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), params[0]);
+	        addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+	        actor.ActualTexture=bitmap;
+	        pending=false;
+	        return String.valueOf(params[0]);
+	    }
+	}
+	/**
+	 * this class loads the image in background and put in the memory pool also
+	 * set it in the scene actor
+	 * */
+	class BitmapWorkerFromURLTask extends AsyncTask<String, Void, String> {
+		SceneActor actor;
+		public boolean pending=true;
+		public BitmapWorkerFromURLTask(SceneActor act){actor=act;}
+	    //...
+	    // Decode image in background.
+	    @Override
+	    protected String doInBackground(String... params) {
+	        final Bitmap bitmap = BitmapFactory.decodeFile(params[0]);
 	        addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
 	        actor.ActualTexture=bitmap;
 	        pending=false;
