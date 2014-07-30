@@ -1,5 +1,5 @@
 
-package org.freegame.models;
+package org.freegame.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,13 +8,13 @@ import android.graphics.Canvas;
  * @author kuno
  *
  */
-public abstract class SceneActor {
+public abstract class GameActor {
 	public int x;
 	public int y;
 	public int width;
 	public int height;
 	public Bitmap ActualTexture=null;
-	public SceneActor(int px, int py, int lwidht, int lheight){
+	public GameActor(int px, int py, int lwidht, int lheight){
 		x=px;y=py;
 		width=lwidht;
 		height=lheight;

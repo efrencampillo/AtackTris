@@ -3,7 +3,7 @@ package org.freegame.attacktis;
 
 
 import org.freegame.game.GameActivity;
-import org.freegame.models.SceneBase;
+import org.freegame.game.GameSceneBase;
 
 
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class AtackTris extends GameActivity {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-    	SceneBase currentScene=getCurrentScene();    
+    	GameSceneBase currentScene=getCurrentScene();    
     	currentScene.touchEvent(event);
     	return super.onTouchEvent(event);
     }    
@@ -34,7 +34,7 @@ public class AtackTris extends GameActivity {
      */ 
     @Override
     public void onBackPressed() {
-    	SceneBase currScene=getCurrentScene();
+    	GameSceneBase currScene=getCurrentScene();
     	currScene.onKeyDown(KeyEvent.KEYCODE_BACK);
     }
     

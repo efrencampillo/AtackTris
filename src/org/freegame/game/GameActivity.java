@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.freegame.attacktis.AtackTris;
 import org.freegame.levels.MainMenu;
-import org.freegame.models.SceneBase;
 import org.freegame.utils.ImageManager;
 
 import android.app.Activity;
@@ -19,7 +18,7 @@ import android.util.Log;
  */
 public class GameActivity extends Activity {
 	public GameSurface mrender;
-	protected ArrayList<SceneBase> scenes;
+	protected ArrayList<GameSceneBase> scenes;
 	public static GameActivity mthis;
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -28,7 +27,7 @@ public class GameActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mrender=new GameSurface(this);
-		scenes= new ArrayList<SceneBase>();
+		scenes= new ArrayList<GameSceneBase>();
 		setContentView(mrender);
 		mthis=this;
 		ImageManager.Initialize(this);
@@ -38,7 +37,7 @@ public class GameActivity extends Activity {
      */
     @Override
     protected void onPause() {
-    	SceneBase currScene=getCurrentScene();
+    	GameSceneBase currScene=getCurrentScene();
     	currScene.onPause();
     	super.onPause();
     }
@@ -47,18 +46,18 @@ public class GameActivity extends Activity {
      */
     @Override
     protected void onResume() {
-    	SceneBase currScene=getCurrentScene();
+    	GameSceneBase currScene=getCurrentScene();
     	currScene.onResume();
     	super.onResume();
     }
     /**
      * this method return the actual level
      * */
- 	public SceneBase getCurrentScene(){
+ 	public GameSceneBase getCurrentScene(){
  		if(scenes.size()>0){
  	  		return scenes.get(scenes.size()-1);
  	  	}else{
- 	  		SceneBase mainmenu=new MainMenu();
+ 	  		GameSceneBase mainmenu=new MainMenu();
  	  		scenes.add(mainmenu);
  	  		return mainmenu;
  	  	}
@@ -66,7 +65,7 @@ public class GameActivity extends Activity {
  	/**
  	 * this method put the scene to the stack of scenes
  	 * */
- 	public void AddSceneToStack(SceneBase scene){
+ 	public void AddSceneToStack(GameSceneBase scene){
  		scene.deepIndex=scenes.size();
     	scenes.add(scene);
     }
@@ -76,7 +75,7 @@ public class GameActivity extends Activity {
     public void popSceneFromStack(){
     	if(scenes.size()>1)scenes.remove(scenes.size()-1);
     }
-    public SceneBase getScene(int index){
+    public GameSceneBase getScene(int index){
     	if(index<=scenes.size())
     		return scenes.get(index);
     	return null;
@@ -86,7 +85,7 @@ public class GameActivity extends Activity {
      * this method os called by the gamesurface to update the game
      * */
     public void mainloop(Canvas c){ //main loop of the game painter
-    	SceneBase currentScene=getCurrentScene();    	  	
+    	GameSceneBase currentScene=getCurrentScene();    	  	
     	currentScene.updateScene();
     	currentScene.paintScene(c);
     }

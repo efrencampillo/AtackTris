@@ -1,5 +1,6 @@
 package org.freegame.models;
 
+import org.freegame.game.GameActor;
 import org.freegame.levels.GameLevel;
 
 import android.graphics.Canvas;
@@ -11,7 +12,7 @@ import android.graphics.Paint;
  * class Block
  * this class has the behaviour to down every turn
  * */
-public class Block extends SceneActor{
+public class Block extends GameActor{
 
     public boolean isStatic=false;
     public boolean arrived=false;// blocstat 0=static,1=falling

@@ -3,7 +3,7 @@ package org.freegame.utils;
 
 import java.net.URI;
 
-import org.freegame.models.SceneActor;
+import org.freegame.game.GameActor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,7 +51,7 @@ public class ImageManager {
 	/**
 	 * this method load the images from resources in a asyncktask
 	 * */
-	public void LoadBitmapFromRes(int resId, SceneActor actor) {
+	public void LoadBitmapFromRes(int resId, GameActor actor) {
 	    final String imageKey = String.valueOf(resId);
 
 	    final Bitmap bitmap = getBitmapFromMemCache(imageKey);
@@ -66,7 +66,7 @@ public class ImageManager {
 	/**
 	 * this method load the images from Uri in a asyncktask
 	 * */
-	public void LoadBitmapFromURI(URI res, SceneActor actor) {
+	public void LoadBitmapFromURI(URI res, GameActor actor) {
 	    final String imageKey =res.toString();
 
 	    final Bitmap bitmap = getBitmapFromMemCache(imageKey);
@@ -82,9 +82,9 @@ public class ImageManager {
 	 * set it in the scene actor
 	 * */
 	class BitmapWorkerTask extends AsyncTask<Integer, Void, String> {
-		SceneActor actor;
+		GameActor actor;
 		public boolean pending=true;
-		public BitmapWorkerTask(SceneActor act){ actor=act;	}
+		public BitmapWorkerTask(GameActor act){ actor=act;	}
 	    //...
 	    // Decode image in background.
 	    @Override
@@ -101,9 +101,9 @@ public class ImageManager {
 	 * set it in the scene actor
 	 * */
 	class BitmapWorkerFromURLTask extends AsyncTask<String, Void, String> {
-		SceneActor actor;
+		GameActor actor;
 		public boolean pending=true;
-		public BitmapWorkerFromURLTask(SceneActor act){actor=act;}
+		public BitmapWorkerFromURLTask(GameActor act){actor=act;}
 	    //...
 	    // Decode image in background.
 	    @Override

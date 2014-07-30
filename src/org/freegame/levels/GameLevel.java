@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.freegame.attacktis.AtackTris;
 import org.freegame.game.GameSurface;
-import org.freegame.models.SceneBase;
+import org.freegame.game.GameSceneBase;
 import org.freegame.models.Block;
 
 import android.graphics.Canvas;
@@ -22,7 +22,7 @@ import android.view.MotionEvent;
  * @author kuno
  *
  */
-public class GameLevel extends SceneBase {
+public class GameLevel extends GameSceneBase {
 
 	public ArrayList<Block> blocs;
     public ArrayList<Point> figure;
@@ -32,9 +32,9 @@ public class GameLevel extends SceneBase {
 
     public Random r;
     public long move,init,time,paused,ttime,linextra;
-    public long btime=120000;//couter timer of the game
+    public long btime=30000;//couter timer of the game
     public int playerpoints=0,cascada=0;
-    public int tmove=300;  //time to move blocks, this will decreasing with time
+    public int tmove=350;  //time to move blocks, this will decreasing with time
     public boolean flagc=false;
     
   //Block option
@@ -96,17 +96,7 @@ public class GameLevel extends SceneBase {
 					table[i][j].draw(c);
 				 }
 			  }
-		  }
-	               
-		  time=System.currentTimeMillis()-init;
-          if(time>btime){
-              tmove-=50;//increasing speed of falling blocks
-              if(tmove<60)tmove=60;
-              btime-=2000;
-              if(btime<0){btime=500;}
-              init=System.currentTimeMillis();
-          }
-	  
+		  }	  
 	}
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#destroyScene()
@@ -182,6 +172,12 @@ public class GameLevel extends SceneBase {
 	    	}
 	    	move=System.currentTimeMillis();
     	}
+    	time=System.currentTimeMillis()-init;
+        if(time>btime){
+            tmove-=50;//increasing speed of falling blocks
+            if(tmove<50)tmove=50;
+            init=System.currentTimeMillis();
+        }
      }
     /**
      * this method change the status of the machine state to state loose
@@ -351,7 +347,7 @@ public class GameLevel extends SceneBase {
 	private void moveBlockTo(int x, int y, int dir){
 		Log.i("touched", "index:"+x+","+y+ " dir "+dir);
 		Block changeblock=table[x][y];
-		if(changeblock==null)return;
+		if(changeblock==null||!changeblock.arrived)return;
 		switch(dir){
 		case 0:
 			if(x<2)return;

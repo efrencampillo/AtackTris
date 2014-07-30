@@ -2,9 +2,9 @@
 package org.freegame.levels;
 
 import org.freegame.game.GameActivity;
+import org.freegame.game.GameButton;
 import org.freegame.game.GameSurface;
-import org.freegame.models.GameButton;
-import org.freegame.models.SceneBase;
+import org.freegame.game.GameSceneBase;
 
 import android.graphics.Canvas;
 
@@ -12,7 +12,7 @@ import android.graphics.Canvas;
  * @author kuno
  *
  */
-public class MainMenu extends SceneBase {
+public class MainMenu extends GameSceneBase {
 
 	
 	/**

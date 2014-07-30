@@ -1,5 +1,5 @@
 
-package org.freegame.models;
+package org.freegame.game;
 
 import org.freegame.attacktis.AtackTris;
 
@@ -14,7 +14,7 @@ import android.util.Log;
  * @author kuno
  *
  */
-public class GameButton extends SceneActor {
+public class GameButton extends GameActor {
 	Runnable action=null;//action to do
 	public String text="";//text to show
 	public int textSize=25;

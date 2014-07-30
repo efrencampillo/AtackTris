@@ -1,5 +1,5 @@
 
-package org.freegame.models;
+package org.freegame.game;
 
 import java.util.ArrayList;
 
@@ -13,14 +13,14 @@ import android.view.MotionEvent;
  * @author kuno
  *
  */
-public abstract class SceneBase {
-	protected ArrayList<SceneActor> actors;
+public abstract class GameSceneBase {
+	protected ArrayList<GameActor> actors;
 	protected boolean isLoading=true;
 	boolean isInitialized=false;
  	GestureDetector detector;
  	public int deepIndex=0;
-	public SceneBase(){
-		actors=new ArrayList<SceneActor>();
+	public GameSceneBase(){
+		actors=new ArrayList<GameActor>();
 		AtackTris.mthis.runOnUiThread(new Runnable(){
 			@Override
 			public void run() {
@@ -46,7 +46,7 @@ public abstract class SceneBase {
 		if(isLoading)
 			loadScene();
 		else{
-			for(SceneActor act:actors)act.update();
+			for(GameActor act:actors)act.update();
 			stepScene();
 		}
 			
@@ -62,7 +62,7 @@ public abstract class SceneBase {
 			paintLoading(c);
 		}else{
 			drawScene(c);
-			for(SceneActor act:actors)act.draw(c);
+			for(GameActor act:actors)act.draw(c);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public abstract class SceneBase {
 	public void clicOn(MotionEvent evt) {
 		int cx=(int) evt.getX();
 		int cy=(int) evt.getY();
-		for(SceneActor btn:actors){
+		for(GameActor btn:actors){
 			if(cx>btn.x&&cx<(btn.width+btn.x)){
 				if(cy>btn.y&&cy<(btn.height+btn.y)){
 					btn.onClick();

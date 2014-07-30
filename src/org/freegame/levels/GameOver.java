@@ -2,10 +2,10 @@
 package org.freegame.levels;
 
 import org.freegame.attacktis.AtackTris;
+import org.freegame.game.GameButton;
 import org.freegame.game.GameSurface;
-import org.freegame.models.GameButton;
-import org.freegame.models.SceneActor;
-import org.freegame.models.SceneBase;
+import org.freegame.game.GameActor;
+import org.freegame.game.GameSceneBase;
 
 import android.graphics.Canvas;
 
@@ -13,7 +13,7 @@ import android.graphics.Canvas;
  * @author kuno
  *
  */
-public class GameOver extends SceneBase {
+public class GameOver extends GameSceneBase {
 
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#loadScene()

@@ -2,10 +2,10 @@
 package org.freegame.levels;
 
 import org.freegame.attacktis.AtackTris;
+import org.freegame.game.GameButton;
 import org.freegame.game.GameSurface;
-import org.freegame.models.GameButton;
-import org.freegame.models.SceneActor;
-import org.freegame.models.SceneBase;
+import org.freegame.game.GameActor;
+import org.freegame.game.GameSceneBase;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ import android.view.KeyEvent;
  * @author kuno
  *
  */
-public class GameLevelPaused extends SceneBase {
+public class GameLevelPaused extends GameSceneBase {
 
 	/* (non-Javadoc)
 	 * @see org.freegame.models.SceneBase#loadScene()
@@ -78,7 +78,7 @@ public class GameLevelPaused extends SceneBase {
 	 */
 	@Override
 	protected void drawScene(Canvas c) {
-		SceneBase background=AtackTris.mthis.getScene(deepIndex-1);
+		GameSceneBase background=AtackTris.mthis.getScene(deepIndex-1);
 		if(background!=null)background.paintScene(c);
 		Paint p=new Paint();
 		p.setColor(Color.parseColor("#77000000"));
