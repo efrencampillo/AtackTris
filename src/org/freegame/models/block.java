@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 
-/**
+/**  
  * class Block
  * this class has the behaviour to down every turn
  * */
