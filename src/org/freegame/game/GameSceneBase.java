@@ -62,7 +62,9 @@ public abstract class GameSceneBase {
 			paintLoading(c);
 		}else{
 			drawScene(c);
-			for(GameActor act:actors)act.draw(c);
+			for(GameActor act:actors){
+				if(act.isVisible)act.draw(c);
+			}
 		}
 	}
 	
@@ -73,6 +75,7 @@ public abstract class GameSceneBase {
 		int cx=(int) evt.getX();
 		int cy=(int) evt.getY();
 		for(GameActor btn:actors){
+			if(!btn.isVisible)continue;
 			if(cx>btn.x&&cx<(btn.width+btn.x)){
 				if(cy>btn.y&&cy<(btn.height+btn.y)){
 					btn.onClick();

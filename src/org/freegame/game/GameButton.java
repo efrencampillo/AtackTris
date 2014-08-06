@@ -37,7 +37,7 @@ public class GameButton extends GameActor {
 	 * @see org.freegame.models.SceneActor#draw(android.graphics.Canvas)
 	 */
 	@Override
-	public void draw(Canvas c) {
+	public void drawActor(Canvas c) {
 		Paint p=new Paint();
 		//TODO fix colors and put style
 		//filled

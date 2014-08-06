@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 
-/**  
+/**
  * class Block
  * this class has the behaviour to down every turn
  * */
@@ -78,7 +78,7 @@ public class Block extends GameActor{
 	 * @see org.freegame.models.SceneActor#draw(android.graphics.Canvas)
 	 */
 	@Override
-	public void draw(Canvas c) {
+	public void drawActor(Canvas c) {
 		Paint p=new Paint();	
 		p.setStyle(Paint.Style.FILL);
 		p.setColor(color);

@@ -14,13 +14,17 @@ public abstract class GameActor {
 	public int width;
 	public int height;
 	public Bitmap ActualTexture=null;
+	public boolean isVisible=true;
 	public GameActor(int px, int py, int lwidht, int lheight){
 		x=px;y=py;
 		width=lwidht;
 		height=lheight;
 	}
 	public abstract void onClick();
-	public abstract void draw(Canvas c);
+	public void draw(Canvas c){
+		if(isVisible)draw(c);
+	}
+	protected abstract void drawActor(Canvas c);
 	public abstract void update();
 	
 }
